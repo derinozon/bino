@@ -19,7 +19,7 @@ $ make install
 Usage
 --------
 
-After installing you can call `bino` in your terminal to apen the app. <br>
+After installing you can call `bino` in your terminal to open the app. <br>
 You can access the manual [here](res/info.md) as well as in the app.
 
 Screenshots
