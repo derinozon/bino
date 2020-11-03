@@ -1,40 +1,9 @@
-#include "main.h"
+#include "ui.h"
+#include "filemachine.h"
+#include "util.h"
 
-int main (int argc, char** argv) {
-	initscr();
-	noecho();
-	cbreak();
-	curs_set(0);
-
-	getmaxyx(stdscr, yMax, xMax);
-
-	MainMenuSel();
-	return 0;
-}
-
-void MainMenuSel () {
-	int choice = MainMenu();
-	if (choice == -1) return;
-	if (choice == 0) {
-		choice = SelectionMenu();
-		if (choice == -1) {
-			MainMenuSel();
-		}
-		if (choice == 0) {
-			system("cd ./software/SearchCLI/ && python3 searchcli.py google");
-		}
-		if (choice == 1) {
-			system("cd ./software/SearchCLI/ && python3 searchcli.py stack");
-		}
-		if (choice == 1) {
-			system("cd ./software/Cipher/ && python3 cipher.py");
-		}
-	}
-	if (choice == 1) {
-		InfoMenu();
-		MainMenuSel();
-	}
-}
+int yMax, xMax;
+int mm_choice = 0;
 
 void InfoMenu () {
 	int height = yMax-2;
@@ -118,7 +87,6 @@ int MainMenu () {
 	WINDOW* arr[3];
 
 	int key;
-	int choice = 0;
 
 	char* headers[] = {
 		"Software", "Info", "Exit"
@@ -127,8 +95,9 @@ int MainMenu () {
 
 	int arrlen = ARRAY_SIZE(headers);
 	while (1) {
+
 		for (int i = 0; i < arrlen; i++) {
-			bool selected = i == choice;
+			bool selected = i == mm_choice;
 			arr[i] = CreateBox(BoxH, BoxW, margin, margin+BoxW*i, headers[i], selected);
 			
 			wrefresh(arr[i]);
@@ -137,15 +106,15 @@ int MainMenu () {
 		
 		key = wgetch(arr[0]);
 
-		if (key == KEY_LEFT) choice--;
-		if (key == KEY_RIGHT) choice++;
+		if (key == KEY_LEFT) mm_choice--;
+		if (key == KEY_RIGHT) mm_choice++;
 		if (key == 10) break;
 		if (key == KEY_BACKSPACE||key == 127) {
 			endwin();
 			return -1;
 		};
 
-		choice = ClampIndex(choice, arrlen);
+		mm_choice = ClampIndex(mm_choice, arrlen);
 	}
 
 	
@@ -153,5 +122,41 @@ int MainMenu () {
 		werase(arr[i]);
 	}
 	endwin();
-	return choice;
+	return mm_choice;
+}
+
+void MainMenuSel () {
+	int choice = MainMenu();
+	if (choice == -1) return;
+	if (choice == 0) {
+		choice = SelectionMenu();
+		if (choice == -1) {
+			MainMenuSel();
+		}
+		if (choice == 0) {
+			system("cd ./software/SearchCLI/ && python3 searchcli.py google");
+		}
+		if (choice == 1) {
+			system("cd ./software/SearchCLI/ && python3 searchcli.py stack");
+		}
+		if (choice == 2) {
+			system("cd ./software/Cipher/ && python3 cipher.py");
+		}
+	}
+	if (choice == 1) {
+		InfoMenu();
+		MainMenuSel();
+	}
+}
+
+int main (int argc, char** argv) {
+	initscr();
+	noecho();
+	cbreak();
+	curs_set(0);
+
+	getmaxyx(stdscr, yMax, xMax);
+
+	MainMenuSel();
+	return 0;
 }
