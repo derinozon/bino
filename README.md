@@ -15,6 +15,8 @@ $ cd bino
 $ make
 $ make install
 ```
+(You might need to install `libncurses5-dev` and `libncursesw5-dev` on linux)
+
 
 Usage
 --------
