@@ -1,7 +1,29 @@
-import sys
+import sys, os
 
-from selenium import webdriver
-import bs4 as bs
+#Manage dependencies
+
+try:
+	from selenium import webdriver
+except ImportError as e:
+	print(e)
+	inp = input("Proceed to install (y/n)? ")
+	if (inp == 'y'):
+		os.system("pip3 install selenium")
+		from selenium import webdriver
+	else :
+		sys.exit()
+
+try:
+	import bs4 as bs
+except ImportError as e:
+	print(e)
+	inp = input("Proceed to install (y/n)? ")
+	if (inp == 'y'):
+		os.system("pip install beautifulsoup4")
+		import bs4 as bs
+	else :
+		sys.exit()
+
 
 term = {
 	"RESET": "\033[0m",
@@ -49,7 +71,7 @@ def askgoogle (question) :
 
 	src = _driver.page_source
 	
-	soup = bs.BeautifulSoup(src,"lxml")
+	soup = bs.BeautifulSoup(src, "html.parser")
 
 	final = soup.find('div', class_='kCrYT')
 	if _assert(final) == -1 : return
@@ -66,7 +88,7 @@ def askstack (question) :
 
 	src = _driver.page_source
 
-	soup = bs.BeautifulSoup(src,"lxml")
+	soup = bs.BeautifulSoup(src, "html.parser")
 
 	a = soup.find('div', class_='answer accepted-answer')
 	if (a == None) :

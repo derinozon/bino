@@ -2,7 +2,11 @@ CC = gcc
 LIBS = -lncurses
 
 bino: src/main.c src/util.c src/ui.c src/filemachine.c
-	$(CC) -o bino src/main.c src/util.c src/ui.c src/filemachine.c $(LIBS)
+	mkdir -p build
+	$(CC) -o ./build/bino src/main.c src/util.c src/ui.c src/filemachine.c $(LIBS)
+
+run:
+	./build/bino
 
 install: SHELL:=/bin/bash
 install:

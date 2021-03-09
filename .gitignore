@@ -52,6 +52,7 @@ Mkfile.old
 dkms.conf
 
 .DS_Store
+/build
   
 .vscode/*
 !.vscode/settings.json
